@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinAlCalc.Solver", "LinAlCa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinAlCalc.FileIO", "LinAlCalc.FileIO\LinAlCalc.FileIO.csproj", "{0654875D-97DE-4811-9D4D-738822114B8C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinAlCalc.Tests", "LinAlCalc.Tests\LinAlCalc.Tests.csproj", "{89DD1721-72FC-4ACF-B53C-0F354E1F4DDD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{0654875D-97DE-4811-9D4D-738822114B8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0654875D-97DE-4811-9D4D-738822114B8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0654875D-97DE-4811-9D4D-738822114B8C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{89DD1721-72FC-4ACF-B53C-0F354E1F4DDD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89DD1721-72FC-4ACF-B53C-0F354E1F4DDD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89DD1721-72FC-4ACF-B53C-0F354E1F4DDD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89DD1721-72FC-4ACF-B53C-0F354E1F4DDD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -105,7 +105,7 @@ namespace LinAlCalc.Solver
         }
 
         // Преобразует double в строку дробью, если это возможно
-        private static string ToSymbolicFraction(double value, double tolerance = 1e-10)
+        public static string ToSymbolicFraction(double value, double tolerance = 1e-10)
         {
             if (Math.Abs(value % 1) < tolerance)
                 return ((int)Math.Round(value)).ToString();

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Globalization;
 
 namespace LinAlCalc.DataProcessing
 {
@@ -23,7 +24,7 @@ namespace LinAlCalc.DataProcessing
                 throw new ArgumentException("Входные данные не могут быть пустыми.");
 
             // Разделяем входные данные на строки
-            var lines = input.Trim().Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+            var lines = input.Trim().Split(['\n', '\r'], StringSplitOptions.RemoveEmptyEntries);
             if (lines.Length == 0)
                 throw new ArgumentException("Не удалось разобрать уравнения.");
 
@@ -93,8 +94,8 @@ namespace LinAlCalc.DataProcessing
                 double coeff = 1.0;
                 int varIndex = -1;
 
-                // Проверяем, есть ли числовой коэффициент (включая дроби)
-                var match = Regex.Match(termWithoutSign, @"^(\d+/\d+|\d*\.?\d*)(x(\d+))?$");
+                // Проверяем, есть ли числовой коэффициент (включая дроби и десятичные)
+                var match = Regex.Match(termWithoutSign, @"^(\d+/\d+|[-]?\d*\.?\d*)(x(\d+))?$");
                 if (!match.Success)
                     throw new ArgumentException($"Некорректный член уравнения: {term}");
 
@@ -188,8 +189,8 @@ namespace LinAlCalc.DataProcessing
                     if (parts.Length != 2)
                         throw new ArgumentException($"Некорректный формат дроби: {numberStr}");
 
-                    double numerator = double.Parse(parts[0].Trim());
-                    double denominator = double.Parse(parts[1].Trim());
+                    double numerator = double.Parse(parts[0].Trim(), CultureInfo.InvariantCulture);
+                    double denominator = double.Parse(parts[1].Trim(), CultureInfo.InvariantCulture);
 
                     if (Math.Abs(denominator) < 1e-10)
                         throw new ArgumentException("Деление на ноль.");
@@ -197,7 +198,8 @@ namespace LinAlCalc.DataProcessing
                     return numerator / denominator;
                 }
 
-                return double.Parse(numberStr);
+                // Поддержка десятичных чисел
+                return double.Parse(numberStr, CultureInfo.InvariantCulture);
             }
             catch (FormatException)
             {

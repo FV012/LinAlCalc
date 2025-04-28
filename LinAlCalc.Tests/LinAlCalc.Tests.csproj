@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+	<IsTestProject>true</IsTestProject>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+	<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
+	<PackageReference Include="MSTest.TestFramework" Version="3.8.3" />
+	<PackageReference Include="MSTest.TestAdapter" Version="3.8.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\LinAlCalc.Controller\LinAlCalc.Controller.csproj" />
+    <ProjectReference Include="..\LinAlCalc.DataProcessing\LinAlCalc.DataProcessing.csproj" />
+    <ProjectReference Include="..\LinAlCalc.FileIO\LinAlCalc.FileIO.csproj" />
+    <ProjectReference Include="..\LinAlCalc.Solver\LinAlCalc.Solver.csproj" />
+  </ItemGroup>
+
+</Project>
