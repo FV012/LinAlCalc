@@ -45,6 +45,7 @@
             this.LoadButton = new System.Windows.Forms.Button();
             this.SaveButton = new System.Windows.Forms.Button();
             this.DocumentationButton = new System.Windows.Forms.Button();
+            this.HelpButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.MatrixGrid)).BeginInit();
             this.TextInputTab.SuspendLayout();
             this.MatrixInputTab.SuspendLayout();
@@ -112,17 +113,16 @@
             this.MatrixGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.MatrixGrid.Location = new System.Drawing.Point(6, 6);
             this.MatrixGrid.Name = "MatrixGrid";
-            this.MatrixGrid.RowHeadersVisible = false; // Hide row headers
+            this.MatrixGrid.RowHeadersVisible = false;
             this.MatrixGrid.Size = new System.Drawing.Size(740, 180);
             this.MatrixGrid.TabIndex = 0;
             this.MatrixGrid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
-            // Default white background and styling
             this.MatrixGrid.DefaultCellStyle.BackColor = System.Drawing.Color.White;
             this.MatrixGrid.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
             this.MatrixGrid.ColumnHeadersDefaultCellStyle.BackColor = System.Drawing.SystemColors.Control;
             this.MatrixGrid.ColumnHeadersDefaultCellStyle.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.MatrixGrid.EnableHeadersVisualStyles = true; // Restore default header styling
-            this.MatrixGrid.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.Single; // Restore default borders
+            this.MatrixGrid.EnableHeadersVisualStyles = true;
+            this.MatrixGrid.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.Single;
             // 
             // RowCountLabel
             // 
@@ -183,8 +183,8 @@
             this.OutputTextBox.Size = new System.Drawing.Size(760, 200);
             this.OutputTextBox.TabIndex = 3;
             this.OutputTextBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.OutputTextBox.WordWrap = false; // Prevent automatic word wrapping
-            this.OutputTextBox.AcceptsReturn = true; // Ensure newlines are accepted
+            this.OutputTextBox.WordWrap = false;
+            this.OutputTextBox.AcceptsReturn = true;
             // 
             // SolveButton
             // 
@@ -210,31 +210,41 @@
             // 
             this.LoadButton.Location = new System.Drawing.Point(224, 500);
             this.LoadButton.Name = "LoadButton";
-            this.LoadButton.Size = new System.Drawing.Size(150, 30);
+            this.LoadButton.Size = new System.Drawing.Size(100, 30);
             this.LoadButton.TabIndex = 6;
-            this.LoadButton.Text = "Загрузить из файла";
+            this.LoadButton.Text = "Загрузить";
             this.LoadButton.UseVisualStyleBackColor = true;
             this.LoadButton.Click += new System.EventHandler(this.LoadButton_Click);
             // 
             // SaveButton
             // 
-            this.SaveButton.Location = new System.Drawing.Point(380, 500);
+            this.SaveButton.Location = new System.Drawing.Point(330, 500);
             this.SaveButton.Name = "SaveButton";
-            this.SaveButton.Size = new System.Drawing.Size(150, 30);
+            this.SaveButton.Size = new System.Drawing.Size(100, 30);
             this.SaveButton.TabIndex = 7;
-            this.SaveButton.Text = "Сохранить результат";
+            this.SaveButton.Text = "Сохранить";
             this.SaveButton.UseVisualStyleBackColor = true;
             this.SaveButton.Click += new System.EventHandler(this.SaveButton_Click);
             // 
             // DocumentationButton
             // 
-            this.DocumentationButton.Location = new System.Drawing.Point(536, 500);
+            this.DocumentationButton.Location = new System.Drawing.Point(436, 500);
             this.DocumentationButton.Name = "DocumentationButton";
             this.DocumentationButton.Size = new System.Drawing.Size(100, 30);
             this.DocumentationButton.TabIndex = 8;
             this.DocumentationButton.Text = "Документация";
             this.DocumentationButton.UseVisualStyleBackColor = true;
             this.DocumentationButton.Click += new System.EventHandler(this.DocumentationButton_Click);
+            // 
+            // HelpButton
+            // 
+            this.HelpButton.Location = new System.Drawing.Point(542, 500);
+            this.HelpButton.Name = "HelpButton";
+            this.HelpButton.Size = new System.Drawing.Size(100, 30);
+            this.HelpButton.TabIndex = 9;
+            this.HelpButton.Text = "Помощь";
+            this.HelpButton.UseVisualStyleBackColor = true;
+            this.HelpButton.Click += new System.EventHandler(this.HelpButton_Click);
             // 
             // MainForm
             // 
@@ -249,6 +259,7 @@
             this.Controls.Add(this.LoadButton);
             this.Controls.Add(this.SaveButton);
             this.Controls.Add(this.DocumentationButton);
+            this.Controls.Add(this.HelpButton);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.MinimumSize = new System.Drawing.Size(800, 580);
@@ -283,5 +294,6 @@
         private System.Windows.Forms.Button LoadButton;
         private System.Windows.Forms.Button SaveButton;
         private System.Windows.Forms.Button DocumentationButton;
+        private System.Windows.Forms.Button HelpButton;
     }
 }
