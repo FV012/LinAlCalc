@@ -143,7 +143,7 @@ namespace LinAlCalc.DataProcessing
         }
 
         // Разделяет левую часть уравнения на члены
-        private static IEnumerable<string> SplitTerms(string expression)
+        public static IEnumerable<string> SplitTerms(string expression)
         {
             var terms = new List<string>();
             string currentTerm = "";

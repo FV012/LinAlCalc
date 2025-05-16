@@ -137,7 +137,7 @@
             // 
             this.RowCountUpDown.Location = new System.Drawing.Point(52, 190);
             this.RowCountUpDown.Minimum = 1;
-            this.RowCountUpDown.Maximum = 10;
+            this.RowCountUpDown.Maximum = 1000;
             this.RowCountUpDown.Value = 3;
             this.RowCountUpDown.Name = "RowCountUpDown";
             this.RowCountUpDown.Size = new System.Drawing.Size(50, 20);
@@ -157,7 +157,7 @@
             // 
             this.ColumnCountUpDown.Location = new System.Drawing.Point(170, 190);
             this.ColumnCountUpDown.Minimum = 1;
-            this.ColumnCountUpDown.Maximum = 10;
+            this.ColumnCountUpDown.Maximum = 1000;
             this.ColumnCountUpDown.Value = 3;
             this.ColumnCountUpDown.Name = "ColumnCountUpDown";
             this.ColumnCountUpDown.Size = new System.Drawing.Size(50, 20);
