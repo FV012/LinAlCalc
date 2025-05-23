@@ -17,6 +17,10 @@ namespace LinAlCalc.UI
             InitializeComponent();
             KeyPreview = true;
             InitializeMatrixGrid();
+            OutputListView.Columns.Clear();
+            OutputListView.Columns.Add("Variable", "Переменная", 150);
+            OutputListView.Columns.Add("Value", "Значение", 150);
+            OutputListView.View = View.Details;
         }
 
         private void InitializeMatrixGrid()

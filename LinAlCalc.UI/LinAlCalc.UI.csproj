@@ -6,7 +6,12 @@
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
+    <ApplicationIcon>free-icon-calculator-7378257.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="free-icon-calculator-7378257.ico" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\LinAlCalc.Controller\LinAlCalc.Controller.csproj" />

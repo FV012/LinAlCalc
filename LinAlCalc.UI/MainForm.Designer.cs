@@ -17,252 +17,288 @@
 
         private void InitializeComponent()
         {
-            this.InputTabControl = new System.Windows.Forms.TabControl();
-            this.TextInputTab = new System.Windows.Forms.TabPage();
-            this.InputLabel = new System.Windows.Forms.Label();
-            this.InputTextBox = new System.Windows.Forms.TextBox();
-            this.MatrixInputTab = new System.Windows.Forms.TabPage();
-            this.MatrixGrid = new System.Windows.Forms.DataGridView();
-            this.RowCountLabel = new System.Windows.Forms.Label();
-            this.RowCountUpDown = new System.Windows.Forms.NumericUpDown();
-            this.ColumnCountLabel = new System.Windows.Forms.Label();
-            this.ColumnCountUpDown = new System.Windows.Forms.NumericUpDown();
-            this.OutputLabel = new System.Windows.Forms.Label();
-            this.OutputListView = new System.Windows.Forms.ListView();
-            this.SolveButton = new System.Windows.Forms.Button();
-            this.ClearButton = new System.Windows.Forms.Button();
-            this.LoadButton = new System.Windows.Forms.Button();
-            this.SaveButton = new System.Windows.Forms.Button();
-            this.DocumentationButton = new System.Windows.Forms.Button();
-            this.HelpButton = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.MatrixGrid)).BeginInit();
-            this.TextInputTab.SuspendLayout();
-            this.MatrixInputTab.SuspendLayout();
-            this.InputTabControl.SuspendLayout();
-            this.SuspendLayout();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
+            InputTabControl = new TabControl();
+            TextInputTab = new TabPage();
+            InputLabel = new Label();
+            InputTextBox = new TextBox();
+            MatrixInputTab = new TabPage();
+            MatrixGrid = new DataGridView();
+            RowCountLabel = new Label();
+            RowCountUpDown = new NumericUpDown();
+            ColumnCountLabel = new Label();
+            ColumnCountUpDown = new NumericUpDown();
+            OutputLabel = new Label();
+            OutputListView = new ListView();
+            SolveButton = new Button();
+            ClearButton = new Button();
+            LoadButton = new Button();
+            SaveButton = new Button();
+            DocumentationButton = new Button();
+            HelpButton = new Button();
+            InputTabControl.SuspendLayout();
+            TextInputTab.SuspendLayout();
+            MatrixInputTab.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)MatrixGrid).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)RowCountUpDown).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)ColumnCountUpDown).BeginInit();
+            SuspendLayout();
             // 
             // InputTabControl
             // 
-            this.InputTabControl.Controls.Add(this.TextInputTab);
-            this.InputTabControl.Controls.Add(this.MatrixInputTab);
-            this.InputTabControl.Location = new System.Drawing.Point(12, 12);
-            this.InputTabControl.Name = "InputTabControl";
-            this.InputTabControl.SelectedIndex = 0;
-            this.InputTabControl.Size = new System.Drawing.Size(760, 260);
-            this.InputTabControl.TabIndex = 0;
+            InputTabControl.Controls.Add(TextInputTab);
+            InputTabControl.Controls.Add(MatrixInputTab);
+            InputTabControl.Location = new Point(14, 14);
+            InputTabControl.Margin = new Padding(4, 3, 4, 3);
+            InputTabControl.Name = "InputTabControl";
+            InputTabControl.SelectedIndex = 0;
+            InputTabControl.Size = new Size(887, 300);
+            InputTabControl.TabIndex = 0;
             // 
             // TextInputTab
             // 
-            this.TextInputTab.Controls.Add(this.InputLabel);
-            this.TextInputTab.Controls.Add(this.InputTextBox);
-            this.TextInputTab.Location = new System.Drawing.Point(4, 22);
-            this.TextInputTab.Name = "TextInputTab";
-            this.TextInputTab.Padding = new System.Windows.Forms.Padding(3);
-            this.TextInputTab.Size = new System.Drawing.Size(752, 234);
-            this.TextInputTab.TabIndex = 0;
-            this.TextInputTab.Text = "Текстовый ввод";
-            this.TextInputTab.UseVisualStyleBackColor = true;
+            TextInputTab.Controls.Add(InputLabel);
+            TextInputTab.Controls.Add(InputTextBox);
+            TextInputTab.Location = new Point(4, 24);
+            TextInputTab.Margin = new Padding(4, 3, 4, 3);
+            TextInputTab.Name = "TextInputTab";
+            TextInputTab.Padding = new Padding(4, 3, 4, 3);
+            TextInputTab.Size = new Size(879, 272);
+            TextInputTab.TabIndex = 0;
+            TextInputTab.Text = "Текстовый ввод";
+            TextInputTab.UseVisualStyleBackColor = true;
             // 
             // InputLabel
             // 
-            this.InputLabel.AutoSize = true;
-            this.InputLabel.Location = new System.Drawing.Point(6, 6);
-            this.InputLabel.Name = "InputLabel";
-            this.InputLabel.Size = new System.Drawing.Size(300, 13);
-            this.InputLabel.TabIndex = 0;
-            this.InputLabel.Text = "Введите систему линейных уравнений (например, 2x1 + x2 = 5)";
+            InputLabel.AutoSize = true;
+            InputLabel.Location = new Point(7, 7);
+            InputLabel.Margin = new Padding(4, 0, 4, 0);
+            InputLabel.Name = "InputLabel";
+            InputLabel.Size = new Size(353, 15);
+            InputLabel.TabIndex = 0;
+            InputLabel.Text = "Введите систему линейных уравнений (например, 2x1 + x2 = 5)";
             // 
             // InputTextBox
             // 
-            this.InputTextBox.Location = new System.Drawing.Point(6, 22);
-            this.InputTextBox.Multiline = true;
-            this.InputTextBox.Name = "InputTextBox";
-            this.InputTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.InputTextBox.Size = new System.Drawing.Size(740, 200);
-            this.InputTextBox.TabIndex = 1;
-            this.InputTextBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            InputTextBox.Font = new Font("Consolas", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            InputTextBox.Location = new Point(7, 25);
+            InputTextBox.Margin = new Padding(4, 3, 4, 3);
+            InputTextBox.Multiline = true;
+            InputTextBox.Name = "InputTextBox";
+            InputTextBox.ScrollBars = ScrollBars.Both;
+            InputTextBox.Size = new Size(863, 230);
+            InputTextBox.TabIndex = 1;
             // 
             // MatrixInputTab
             // 
-            this.MatrixInputTab.Controls.Add(this.MatrixGrid);
-            this.MatrixInputTab.Controls.Add(this.RowCountLabel);
-            this.MatrixInputTab.Controls.Add(this.RowCountUpDown);
-            this.MatrixInputTab.Controls.Add(this.ColumnCountLabel);
-            this.MatrixInputTab.Controls.Add(this.ColumnCountUpDown);
-            this.MatrixInputTab.Location = new System.Drawing.Point(4, 22);
-            this.MatrixInputTab.Name = "MatrixInputTab";
-            this.MatrixInputTab.Padding = new System.Windows.Forms.Padding(3);
-            this.MatrixInputTab.Size = new System.Drawing.Size(752, 234);
-            this.MatrixInputTab.TabIndex = 1;
-            this.MatrixInputTab.Text = "Матричный ввод";
-            this.MatrixInputTab.UseVisualStyleBackColor = true;
+            MatrixInputTab.Controls.Add(MatrixGrid);
+            MatrixInputTab.Controls.Add(RowCountLabel);
+            MatrixInputTab.Controls.Add(RowCountUpDown);
+            MatrixInputTab.Controls.Add(ColumnCountLabel);
+            MatrixInputTab.Controls.Add(ColumnCountUpDown);
+            MatrixInputTab.Location = new Point(4, 24);
+            MatrixInputTab.Margin = new Padding(4, 3, 4, 3);
+            MatrixInputTab.Name = "MatrixInputTab";
+            MatrixInputTab.Padding = new Padding(4, 3, 4, 3);
+            MatrixInputTab.Size = new Size(879, 272);
+            MatrixInputTab.TabIndex = 1;
+            MatrixInputTab.Text = "Матричный ввод";
+            MatrixInputTab.UseVisualStyleBackColor = true;
             // 
             // MatrixGrid
             // 
-            this.MatrixGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.MatrixGrid.Location = new System.Drawing.Point(6, 6);
-            this.MatrixGrid.Name = "MatrixGrid";
-            this.MatrixGrid.RowHeadersVisible = false;
-            this.MatrixGrid.Size = new System.Drawing.Size(740, 180);
-            this.MatrixGrid.TabIndex = 0;
-            this.MatrixGrid.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
-            this.MatrixGrid.DefaultCellStyle.BackColor = System.Drawing.Color.White;
-            this.MatrixGrid.DefaultCellStyle.ForeColor = System.Drawing.Color.Black;
-            this.MatrixGrid.ColumnHeadersDefaultCellStyle.BackColor = System.Drawing.SystemColors.Control;
-            this.MatrixGrid.ColumnHeadersDefaultCellStyle.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.MatrixGrid.EnableHeadersVisualStyles = true;
-            this.MatrixGrid.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.Single;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = SystemColors.Control;
+            dataGridViewCellStyle1.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle1.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            MatrixGrid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            MatrixGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = Color.White;
+            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle2.ForeColor = Color.Black;
+            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
+            MatrixGrid.DefaultCellStyle = dataGridViewCellStyle2;
+            MatrixGrid.EditMode = DataGridViewEditMode.EditOnEnter;
+            MatrixGrid.Location = new Point(7, 7);
+            MatrixGrid.Margin = new Padding(4, 3, 4, 3);
+            MatrixGrid.Name = "MatrixGrid";
+            MatrixGrid.RowHeadersVisible = false;
+            MatrixGrid.Size = new Size(863, 208);
+            MatrixGrid.TabIndex = 0;
             // 
             // RowCountLabel
             // 
-            this.RowCountLabel.AutoSize = true;
-            this.RowCountLabel.Location = new System.Drawing.Point(6, 192);
-            this.RowCountLabel.Name = "RowCountLabel";
-            this.RowCountLabel.Size = new System.Drawing.Size(40, 13);
-            this.RowCountLabel.TabIndex = 1;
-            this.RowCountLabel.Text = "Строк:";
+            RowCountLabel.AutoSize = true;
+            RowCountLabel.Location = new Point(7, 222);
+            RowCountLabel.Margin = new Padding(4, 0, 4, 0);
+            RowCountLabel.Name = "RowCountLabel";
+            RowCountLabel.Size = new Size(43, 15);
+            RowCountLabel.TabIndex = 1;
+            RowCountLabel.Text = "Строк:";
             // 
             // RowCountUpDown
             // 
-            this.RowCountUpDown.Location = new System.Drawing.Point(52, 190);
-            this.RowCountUpDown.Minimum = 1;
-            this.RowCountUpDown.Maximum = 1000;
-            this.RowCountUpDown.Value = 3;
-            this.RowCountUpDown.Name = "RowCountUpDown";
-            this.RowCountUpDown.Size = new System.Drawing.Size(50, 20);
-            this.RowCountUpDown.TabIndex = 2;
-            this.RowCountUpDown.ValueChanged += new System.EventHandler(this.RowCountUpDown_ValueChanged);
+            RowCountUpDown.Location = new Point(61, 219);
+            RowCountUpDown.Margin = new Padding(4, 3, 4, 3);
+            RowCountUpDown.Maximum = new decimal(new int[] { 1000, 0, 0, 0 });
+            RowCountUpDown.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            RowCountUpDown.Name = "RowCountUpDown";
+            RowCountUpDown.Size = new Size(58, 23);
+            RowCountUpDown.TabIndex = 2;
+            RowCountUpDown.Value = new decimal(new int[] { 3, 0, 0, 0 });
+            RowCountUpDown.ValueChanged += RowCountUpDown_ValueChanged;
             // 
             // ColumnCountLabel
             // 
-            this.ColumnCountLabel.AutoSize = true;
-            this.ColumnCountLabel.Location = new System.Drawing.Point(108, 192);
-            this.ColumnCountLabel.Name = "ColumnCountLabel";
-            this.ColumnCountLabel.Size = new System.Drawing.Size(56, 13);
-            this.ColumnCountLabel.TabIndex = 3;
-            this.ColumnCountLabel.Text = "Столбцов:";
+            ColumnCountLabel.AutoSize = true;
+            ColumnCountLabel.Location = new Point(126, 222);
+            ColumnCountLabel.Margin = new Padding(4, 0, 4, 0);
+            ColumnCountLabel.Name = "ColumnCountLabel";
+            ColumnCountLabel.Size = new Size(64, 15);
+            ColumnCountLabel.TabIndex = 3;
+            ColumnCountLabel.Text = "Столбцов:";
             // 
             // ColumnCountUpDown
             // 
-            this.ColumnCountUpDown.Location = new System.Drawing.Point(170, 190);
-            this.ColumnCountUpDown.Minimum = 1;
-            this.ColumnCountUpDown.Maximum = 1000;
-            this.ColumnCountUpDown.Value = 3;
-            this.ColumnCountUpDown.Name = "ColumnCountUpDown";
-            this.ColumnCountUpDown.Size = new System.Drawing.Size(50, 20);
-            this.ColumnCountUpDown.TabIndex = 4;
-            this.ColumnCountUpDown.ValueChanged += new System.EventHandler(this.ColumnCountUpDown_ValueChanged);
+            ColumnCountUpDown.Location = new Point(198, 219);
+            ColumnCountUpDown.Margin = new Padding(4, 3, 4, 3);
+            ColumnCountUpDown.Maximum = new decimal(new int[] { 1000, 0, 0, 0 });
+            ColumnCountUpDown.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            ColumnCountUpDown.Name = "ColumnCountUpDown";
+            ColumnCountUpDown.Size = new Size(58, 23);
+            ColumnCountUpDown.TabIndex = 4;
+            ColumnCountUpDown.Value = new decimal(new int[] { 3, 0, 0, 0 });
+            ColumnCountUpDown.ValueChanged += ColumnCountUpDown_ValueChanged;
             // 
             // OutputLabel
             // 
-            this.OutputLabel.AutoSize = true;
-            this.OutputLabel.Location = new System.Drawing.Point(12, 278);
-            this.OutputLabel.Name = "OutputLabel";
-            this.OutputLabel.Size = new System.Drawing.Size(60, 13);
-            this.OutputLabel.TabIndex = 2;
-            this.OutputLabel.Text = "Результат:";
+            OutputLabel.AutoSize = true;
+            OutputLabel.Location = new Point(14, 321);
+            OutputLabel.Margin = new Padding(4, 0, 4, 0);
+            OutputLabel.Name = "OutputLabel";
+            OutputLabel.Size = new Size(63, 15);
+            OutputLabel.TabIndex = 2;
+            OutputLabel.Text = "Результат:";
             // 
             // OutputListView
             // 
-            this.OutputListView.Location = new System.Drawing.Point(12, 294);
-            this.OutputListView.Name = "OutputListView";
-            this.OutputListView.Size = new System.Drawing.Size(760, 200);
-            this.OutputListView.TabIndex = 3;
-            this.OutputListView.View = System.Windows.Forms.View.Details;
-            this.OutputListView.FullRowSelect = true;
-            this.OutputListView.GridLines = true;
-            this.OutputListView.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.OutputListView.Columns.Add("Переменная", 200);
-            this.OutputListView.Columns.Add("Значение", 560);
+            OutputListView.Font = new Font("Consolas", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            OutputListView.FullRowSelect = true;
+            OutputListView.GridLines = true;
+            OutputListView.Location = new Point(14, 339);
+            OutputListView.Margin = new Padding(4, 3, 4, 3);
+            OutputListView.Name = "OutputListView";
+            OutputListView.Size = new Size(886, 230);
+            OutputListView.TabIndex = 3;
+            OutputListView.UseCompatibleStateImageBehavior = false;
+            OutputListView.View = View.Details;
             // 
             // SolveButton
             // 
-            this.SolveButton.Location = new System.Drawing.Point(12, 500);
-            this.SolveButton.Name = "SolveButton";
-            this.SolveButton.Size = new System.Drawing.Size(100, 30);
-            this.SolveButton.TabIndex = 4;
-            this.SolveButton.Text = "Решить";
-            this.SolveButton.UseVisualStyleBackColor = true;
-            this.SolveButton.Click += new System.EventHandler(this.SolveButton_Click);
+            SolveButton.Location = new Point(14, 577);
+            SolveButton.Margin = new Padding(4, 3, 4, 3);
+            SolveButton.Name = "SolveButton";
+            SolveButton.Size = new Size(117, 35);
+            SolveButton.TabIndex = 4;
+            SolveButton.Text = "Решить";
+            SolveButton.UseVisualStyleBackColor = true;
+            SolveButton.Click += SolveButton_Click;
             // 
             // ClearButton
             // 
-            this.ClearButton.Location = new System.Drawing.Point(118, 500);
-            this.ClearButton.Name = "ClearButton";
-            this.ClearButton.Size = new System.Drawing.Size(100, 30);
-            this.ClearButton.TabIndex = 5;
-            this.ClearButton.Text = "Очистить";
-            this.ClearButton.UseVisualStyleBackColor = true;
-            this.ClearButton.Click += new System.EventHandler(this.ClearButton_Click);
+            ClearButton.Location = new Point(138, 577);
+            ClearButton.Margin = new Padding(4, 3, 4, 3);
+            ClearButton.Name = "ClearButton";
+            ClearButton.Size = new Size(117, 35);
+            ClearButton.TabIndex = 5;
+            ClearButton.Text = "Очистить";
+            ClearButton.UseVisualStyleBackColor = true;
+            ClearButton.Click += ClearButton_Click;
             // 
             // LoadButton
             // 
-            this.LoadButton.Location = new System.Drawing.Point(224, 500);
-            this.LoadButton.Name = "LoadButton";
-            this.LoadButton.Size = new System.Drawing.Size(100, 30);
-            this.LoadButton.TabIndex = 6;
-            this.LoadButton.Text = "Загрузить";
-            this.LoadButton.UseVisualStyleBackColor = true;
-            this.LoadButton.Click += new System.EventHandler(this.LoadButton_Click);
+            LoadButton.Location = new Point(261, 577);
+            LoadButton.Margin = new Padding(4, 3, 4, 3);
+            LoadButton.Name = "LoadButton";
+            LoadButton.Size = new Size(117, 35);
+            LoadButton.TabIndex = 6;
+            LoadButton.Text = "Загрузить";
+            LoadButton.UseVisualStyleBackColor = true;
+            LoadButton.Click += LoadButton_Click;
             // 
             // SaveButton
             // 
-            this.SaveButton.Location = new System.Drawing.Point(330, 500);
-            this.SaveButton.Name = "SaveButton";
-            this.SaveButton.Size = new System.Drawing.Size(100, 30);
-            this.SaveButton.TabIndex = 7;
-            this.SaveButton.Text = "Сохранить";
-            this.SaveButton.UseVisualStyleBackColor = true;
-            this.SaveButton.Click += new System.EventHandler(this.SaveButton_Click);
+            SaveButton.Location = new Point(385, 577);
+            SaveButton.Margin = new Padding(4, 3, 4, 3);
+            SaveButton.Name = "SaveButton";
+            SaveButton.Size = new Size(117, 35);
+            SaveButton.TabIndex = 7;
+            SaveButton.Text = "Сохранить";
+            SaveButton.UseVisualStyleBackColor = true;
+            SaveButton.Click += SaveButton_Click;
             // 
             // DocumentationButton
             // 
-            this.DocumentationButton.Location = new System.Drawing.Point(436, 500);
-            this.DocumentationButton.Name = "DocumentationButton";
-            this.DocumentationButton.Size = new System.Drawing.Size(100, 30);
-            this.DocumentationButton.TabIndex = 8;
-            this.DocumentationButton.Text = "Документация";
-            this.DocumentationButton.UseVisualStyleBackColor = true;
-            this.DocumentationButton.Click += new System.EventHandler(this.DocumentationButton_Click);
+            DocumentationButton.Location = new Point(509, 577);
+            DocumentationButton.Margin = new Padding(4, 3, 4, 3);
+            DocumentationButton.Name = "DocumentationButton";
+            DocumentationButton.Size = new Size(117, 35);
+            DocumentationButton.TabIndex = 8;
+            DocumentationButton.Text = "Документация";
+            DocumentationButton.UseVisualStyleBackColor = true;
+            DocumentationButton.Click += DocumentationButton_Click;
             // 
             // HelpButton
             // 
-            this.HelpButton.Location = new System.Drawing.Point(542, 500);
-            this.HelpButton.Name = "HelpButton";
-            this.HelpButton.Size = new System.Drawing.Size(100, 30);
-            this.HelpButton.TabIndex = 9;
-            this.HelpButton.Text = "Помощь";
-            this.HelpButton.UseVisualStyleBackColor = true;
-            this.HelpButton.Click += new System.EventHandler(this.HelpButton_Click);
+            HelpButton.Location = new Point(632, 577);
+            HelpButton.Margin = new Padding(4, 3, 4, 3);
+            HelpButton.Name = "HelpButton";
+            HelpButton.Size = new Size(117, 35);
+            HelpButton.TabIndex = 9;
+            HelpButton.Text = "Помощь";
+            HelpButton.UseVisualStyleBackColor = true;
+            HelpButton.Click += HelpButton_Click;
             // 
             // MainForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(784, 540);
-            this.Controls.Add(this.InputTabControl);
-            this.Controls.Add(this.OutputLabel);
-            this.Controls.Add(this.OutputListView);
-            this.Controls.Add(this.SolveButton);
-            this.Controls.Add(this.ClearButton);
-            this.Controls.Add(this.LoadButton);
-            this.Controls.Add(this.SaveButton);
-            this.Controls.Add(this.DocumentationButton);
-            this.Controls.Add(this.HelpButton);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.MaximizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(800, 580);
-            this.Name = "MainForm";
-            this.Text = "LinAlCalc - Калькулятор СЛАУ";
-            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainForm_KeyDown);
-            ((System.ComponentModel.ISupportInitialize)(this.MatrixGrid)).EndInit();
-            this.TextInputTab.ResumeLayout(false);
-            this.TextInputTab.PerformLayout();
-            this.MatrixInputTab.ResumeLayout(false);
-            this.MatrixInputTab.PerformLayout();
-            this.InputTabControl.ResumeLayout(false);
-            this.ResumeLayout(false);
-            this.PerformLayout();
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(915, 624);
+            Controls.Add(InputTabControl);
+            Controls.Add(OutputLabel);
+            Controls.Add(OutputListView);
+            Controls.Add(SolveButton);
+            Controls.Add(ClearButton);
+            Controls.Add(LoadButton);
+            Controls.Add(SaveButton);
+            Controls.Add(DocumentationButton);
+            Controls.Add(HelpButton);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
+            Icon = (Icon)resources.GetObject("$this.Icon");
+            Margin = new Padding(4, 3, 4, 3);
+            MaximizeBox = false;
+            MinimumSize = new Size(931, 663);
+            Name = "MainForm";
+            Text = "LinAlCalc - Калькулятор СЛАУ";
+            KeyDown += MainForm_KeyDown;
+            InputTabControl.ResumeLayout(false);
+            TextInputTab.ResumeLayout(false);
+            TextInputTab.PerformLayout();
+            MatrixInputTab.ResumeLayout(false);
+            MatrixInputTab.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)MatrixGrid).EndInit();
+            ((System.ComponentModel.ISupportInitialize)RowCountUpDown).EndInit();
+            ((System.ComponentModel.ISupportInitialize)ColumnCountUpDown).EndInit();
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
