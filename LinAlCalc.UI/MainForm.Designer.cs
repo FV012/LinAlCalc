@@ -39,7 +39,7 @@
             this.ColumnCountLabel = new System.Windows.Forms.Label();
             this.ColumnCountUpDown = new System.Windows.Forms.NumericUpDown();
             this.OutputLabel = new System.Windows.Forms.Label();
-            this.OutputTextBox = new System.Windows.Forms.TextBox();
+            this.OutputListView = new System.Windows.Forms.ListView();
             this.SolveButton = new System.Windows.Forms.Button();
             this.ClearButton = new System.Windows.Forms.Button();
             this.LoadButton = new System.Windows.Forms.Button();
@@ -173,18 +173,18 @@
             this.OutputLabel.TabIndex = 2;
             this.OutputLabel.Text = "Результат:";
             // 
-            // OutputTextBox
+            // OutputListView
             // 
-            this.OutputTextBox.Location = new System.Drawing.Point(12, 294);
-            this.OutputTextBox.Multiline = true;
-            this.OutputTextBox.Name = "OutputTextBox";
-            this.OutputTextBox.ReadOnly = true;
-            this.OutputTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.OutputTextBox.Size = new System.Drawing.Size(760, 200);
-            this.OutputTextBox.TabIndex = 3;
-            this.OutputTextBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.OutputTextBox.WordWrap = false;
-            this.OutputTextBox.AcceptsReturn = true;
+            this.OutputListView.Location = new System.Drawing.Point(12, 294);
+            this.OutputListView.Name = "OutputListView";
+            this.OutputListView.Size = new System.Drawing.Size(760, 200);
+            this.OutputListView.TabIndex = 3;
+            this.OutputListView.View = System.Windows.Forms.View.Details;
+            this.OutputListView.FullRowSelect = true;
+            this.OutputListView.GridLines = true;
+            this.OutputListView.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.OutputListView.Columns.Add("Переменная", 200);
+            this.OutputListView.Columns.Add("Значение", 560);
             // 
             // SolveButton
             // 
@@ -253,7 +253,7 @@
             this.ClientSize = new System.Drawing.Size(784, 540);
             this.Controls.Add(this.InputTabControl);
             this.Controls.Add(this.OutputLabel);
-            this.Controls.Add(this.OutputTextBox);
+            this.Controls.Add(this.OutputListView);
             this.Controls.Add(this.SolveButton);
             this.Controls.Add(this.ClearButton);
             this.Controls.Add(this.LoadButton);
@@ -265,6 +265,7 @@
             this.MinimumSize = new System.Drawing.Size(800, 580);
             this.Name = "MainForm";
             this.Text = "LinAlCalc - Калькулятор СЛАУ";
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainForm_KeyDown);
             ((System.ComponentModel.ISupportInitialize)(this.MatrixGrid)).EndInit();
             this.TextInputTab.ResumeLayout(false);
             this.TextInputTab.PerformLayout();
@@ -288,7 +289,7 @@
         private System.Windows.Forms.Label ColumnCountLabel;
         private System.Windows.Forms.NumericUpDown ColumnCountUpDown;
         private System.Windows.Forms.Label OutputLabel;
-        private System.Windows.Forms.TextBox OutputTextBox;
+        private System.Windows.Forms.ListView OutputListView;
         private System.Windows.Forms.Button SolveButton;
         private System.Windows.Forms.Button ClearButton;
         private System.Windows.Forms.Button LoadButton;

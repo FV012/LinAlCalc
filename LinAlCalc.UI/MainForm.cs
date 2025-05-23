@@ -1,181 +1,42 @@
+п»їusing System;
+using System.Windows.Forms;
 using LinAlCalc.Controller;
 using LinAlCalc.DataProcessing;
 using LinAlCalc.FileIO;
+using LinAlCalc.Solver;
 using System.Diagnostics;
+using System.Globalization;
+using System.Text;
 
 namespace LinAlCalc.UI
 {
     public partial class MainForm : Form
     {
-        private readonly LinearSystemController _controller;
-        private readonly FileManager _fileManager;
+        private readonly LinearSystemController _controller = new LinearSystemController();
+        private readonly FileManager _fileManager = new FileManager();
 
         public MainForm()
         {
             InitializeComponent();
-            _controller = new LinearSystemController();
-            _fileManager = new FileManager();
-            InitializeMatrixGrid();
-            this.KeyPreview = true; // Разрешаем форме перехватывать события клавиш
-            this.KeyDown += new KeyEventHandler(MainForm_KeyDown!); // Подписываемся на событие KeyDown
+            InitializeMatrixGrid(); // Initialize grid on form load
         }
 
         private void InitializeMatrixGrid()
         {
-            try
+            // Initialize MatrixGrid with default 3x4 (3 coefficients + b)
+            MatrixGrid.Columns.Clear();
+            MatrixGrid.Rows.Clear();
+            for (int j = 0; j < 3; j++)
             {
-                MatrixGrid.AllowUserToAddRows = false;
-                MatrixGrid.RowCount = (int)RowCountUpDown.Value;
-                MatrixGrid.ColumnCount = (int)ColumnCountUpDown.Value + 1;
-
-                for (int i = 0; i < (int)ColumnCountUpDown.Value; i++)
-                {
-                    MatrixGrid.Columns[i].HeaderText = $"x{i + 1}";
-                    MatrixGrid.Columns[i].Width = 60;
-                }
-                MatrixGrid.Columns[(int)ColumnCountUpDown.Value].HeaderText = "=";
-                MatrixGrid.Columns[(int)ColumnCountUpDown.Value].Width = 60;
-
-                for (int i = 0; i < MatrixGrid.RowCount; i++)
-                {
-                    for (int j = 0; j < MatrixGrid.ColumnCount; j++)
-                    {
-                        MatrixGrid[j, i].Value = "0";
-                    }
-                }
-
-                MatrixGrid.EditMode = DataGridViewEditMode.EditOnEnter;
+                MatrixGrid.Columns.Add($"col{j}", $"x{j + 1}");
+                MatrixGrid.Columns[j].SortMode = DataGridViewColumnSortMode.NotSortable;
+                MatrixGrid.Columns[j].ValueType = typeof(string);
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Ошибка инициализации таблицы: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void SolveButton_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                string resultText;
-                if (InputTabControl.SelectedTab == TextInputTab)
-                {
-                    string input = InputTextBox.Text;
-                    if (string.IsNullOrWhiteSpace(input))
-                    {
-                        MessageBox.Show("Пожалуйста, введите систему уравнений.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        return;
-                    }
-
-                    if (!_controller.ValidateInput(input, out string errorMessage))
-                    {
-                        MessageBox.Show(errorMessage, "Ошибка ввода", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return;
-                    }
-
-                    var result = _controller.SolveSystem(input);
-                    resultText = result.ToString();
-                }
-                else
-                {
-                    var system = ReadMatrixInput();
-                    if (system == null)
-                    {
-                        MessageBox.Show("Пожалуйста, заполните все ячейки корректными числами.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        return;
-                    }
-
-                    DataProcessor.ValidateInput(system);
-                    var A = MathNet.Numerics.LinearAlgebra.Matrix<double>.Build.DenseOfArray(system.Coefficients);
-                    var b = MathNet.Numerics.LinearAlgebra.Vector<double>.Build.DenseOfArray(system.Constants);
-                    var result = LinAlCalc.Solver.LinearSystemSolver.Solve(A, b);
-                    resultText = result.ToString();
-                }
-
-                if (!resultText.Contains("\n"))
-                {
-                    MessageBox.Show("Warning: No newline characters detected in result text.", "Debug", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                }
-
-                OutputTextBox.Text = resultText;
-                OutputTextBox.Refresh();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Ошибка: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private DataProcessor.LinearSystem ReadMatrixInput()
-        {
-            int rows = (int)RowCountUpDown.Value;
-            int cols = (int)ColumnCountUpDown.Value;
-            var coefficients = new double[rows, cols];
-            var constants = new double[rows];
-            string errorMessage = string.Empty;
-
-            for (int i = 0; i < rows; i++)
-            {
-                for (int j = 0; j < cols; j++)
-                {
-                    var cellValue = MatrixGrid[j, i].Value?.ToString()?.Trim();
-                    if (string.IsNullOrEmpty(cellValue))
-                    {
-                        errorMessage = $"Ячейка ({i + 1}, x{j + 1}) пуста.";
-                        MessageBox.Show(errorMessage, "Ошибка ввода", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        return null;
-                    }
-
-                    if (!double.TryParse(cellValue, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out double value))
-                    {
-                        errorMessage = $"Некорректное число в ячейке ({i + 1}, x{j + 1}): '{cellValue}'.";
-                        MessageBox.Show(errorMessage, "Ошибка ввода", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        return null;
-                    }
-                    coefficients[i, j] = value;
-                }
-
-                var constantValue = MatrixGrid[cols, i].Value?.ToString()?.Trim();
-                if (string.IsNullOrEmpty(constantValue))
-                {
-                    errorMessage = $"Ячейка свободного члена в строке {i + 1} пуста.";
-                    MessageBox.Show(errorMessage, "Ошибка ввода", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return null;
-                }
-
-                if (!double.TryParse(constantValue, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out double constant))
-                {
-                    errorMessage = $"Некорректное число в ячейке свободного члена строки {i + 1}: '{constantValue}'.";
-                    MessageBox.Show(errorMessage, "Ошибка ввода", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return null;
-                }
-                constants[i] = constant;
-            }
-
-            return new DataProcessor.LinearSystem
-            {
-                Coefficients = coefficients,
-                Constants = constants
-            };
-        }
-
-        private void ClearButton_Click(object sender, EventArgs e)
-        {
-            if (InputTabControl.SelectedTab == TextInputTab)
-            {
-                InputTextBox.Clear();
-                OutputTextBox.Clear();
-            }
-            else
-            {
-                for (int i = 0; i < MatrixGrid.RowCount; i++)
-                {
-                    for (int j = 0; j < MatrixGrid.ColumnCount; j++)
-                    {
-                        MatrixGrid[j, i].Value = "0";
-                    }
-                }
-                OutputTextBox.Clear();
-            }
+            MatrixGrid.Columns.Add("col_b", "b");
+            MatrixGrid.Columns[3].SortMode = DataGridViewColumnSortMode.NotSortable;
+            MatrixGrid.Columns[3].ValueType = typeof(string);
+            MatrixGrid.RowCount = 3;
+            MatrixGrid.Refresh();
         }
 
         private async void LoadButton_Click(object sender, EventArgs e)
@@ -183,7 +44,7 @@ namespace LinAlCalc.UI
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
                 openFileDialog.Filter = "CSV files (*.csv)|*.csv";
-                openFileDialog.Title = "Открыть файл с системой уравнений";
+                openFileDialog.Title = "РћС‚РєСЂС‹С‚СЊ С„Р°Р№Р» СЃ СЃРёСЃС‚РµРјРѕР№ СѓСЂР°РІРЅРµРЅРёР№";
 
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
@@ -191,68 +52,274 @@ namespace LinAlCalc.UI
                     {
                         if (InputTabControl.SelectedTab == TextInputTab)
                         {
-                            // Текстовый ввод
                             string input = await _fileManager.ReadInputAsync(openFileDialog.FileName);
                             InputTextBox.Text = input;
-                            OutputTextBox.Text = string.Empty;
+                            OutputListView.Items.Clear();
                         }
                         else if (InputTabControl.SelectedTab == MatrixInputTab)
                         {
                             var (coefficients, constants) = await _fileManager.ReadMatrixInputAsync(openFileDialog.FileName);
-                            int rows = coefficients.GetLength(0);
-                            int cols = coefficients.GetLength(1);
+                            int rowCount = coefficients.GetLength(0);
+                            int colCount = coefficients.GetLength(1);
 
-                            RowCountUpDown.Value = rows;
-                            ColumnCountUpDown.Value = cols;
+                            // Suppress ValueChanged events
+                            RowCountUpDown.ValueChanged -= RowCountUpDown_ValueChanged;
+                            ColumnCountUpDown.ValueChanged -= ColumnCountUpDown_ValueChanged;
 
-                            MatrixGrid.RowCount = rows;
-                            MatrixGrid.ColumnCount = cols + 1; // +1 для свободных членов
-
-                            for (int i = 0; i < rows; i++)
+                            try
                             {
-                                for (int j = 0; j < cols; j++)
+                                // Clear and set up grid
+                                MatrixGrid.Columns.Clear();
+                                MatrixGrid.Rows.Clear();
+                                for (int j = 0; j < colCount; j++)
                                 {
-                                    MatrixGrid[j, i].Value = coefficients[i, j];
+                                    MatrixGrid.Columns.Add($"col{j}", $"x{j + 1}");
+                                    MatrixGrid.Columns[j].SortMode = DataGridViewColumnSortMode.NotSortable;
+                                    MatrixGrid.Columns[j].ValueType = typeof(string);
                                 }
-                                MatrixGrid[cols, i].Value = constants[i];
+                                MatrixGrid.Columns.Add("col_b", "b");
+                                MatrixGrid.Columns[colCount].SortMode = DataGridViewColumnSortMode.NotSortable;
+                                MatrixGrid.Columns[colCount].ValueType = typeof(string);
+                                MatrixGrid.RowCount = rowCount;
+
+                                // Populate grid
+                                for (int i = 0; i < rowCount; i++)
+                                {
+                                    for (int j = 0; j < colCount; j++)
+                                    {
+                                        MatrixGrid[j, i].Value = coefficients[i, j].ToString(CultureInfo.InvariantCulture);
+                                    }
+                                    MatrixGrid[colCount, i].Value = constants[i].ToString(CultureInfo.InvariantCulture);
+                                }
+
+                                // Update NumericUpDown
+                                RowCountUpDown.Value = rowCount;
+                                ColumnCountUpDown.Value = colCount;
+
+                                MatrixGrid.Refresh();
+                            }
+                            finally
+                            {
+                                // Restore ValueChanged events
+                                RowCountUpDown.ValueChanged += RowCountUpDown_ValueChanged;
+                                ColumnCountUpDown.ValueChanged += ColumnCountUpDown_ValueChanged;
                             }
 
-                            // Очищаем выходное поле
-                            OutputTextBox.Text = string.Empty;
+                            OutputListView.Items.Clear();
                         }
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show($"Ошибка при загрузке файла: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show($"РћС€РёР±РєР° РїСЂРё Р·Р°РіСЂСѓР·РєРµ С„Р°Р№Р»Р°: {ex.Message}", "РћС€РёР±РєР°", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
             }
         }
 
-        private async void SaveButton_Click(object sender, EventArgs e)
+        private void SolveButton_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(OutputTextBox.Text))
+            try
             {
-                MessageBox.Show("Нет результатов для сохранения.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
+                SolutionResult result = null;
+
+                if (InputTabControl.SelectedTab == TextInputTab)
+                {
+                    string input = InputTextBox.Text;
+                    string errorMessage;
+                    if (!_controller.ValidateInput(input, out errorMessage))
+                    {
+                        MessageBox.Show($"РћС€РёР±РєР°: {errorMessage}", "РћС€РёР±РєР°", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                    result = _controller.SolveSystem(input);
+                }
+                else if (InputTabControl.SelectedTab == MatrixInputTab)
+                {
+                    int rowCount = (int)RowCountUpDown.Value;
+                    int colCount = (int)ColumnCountUpDown.Value;
+                    var coefficients = new double[rowCount, colCount];
+                    var constants = new double[rowCount];
+
+                    for (int i = 0; i < rowCount; i++)
+                    {
+                        for (int j = 0; j < colCount; j++)
+                        {
+                            string value = MatrixGrid[j, i].Value?.ToString();
+                            if (string.IsNullOrEmpty(value) || !double.TryParse(value, NumberStyles.Any, CultureInfo.InvariantCulture, out double parsedValue))
+                            {
+                                MessageBox.Show($"РќРµРєРѕСЂСЂРµРєС‚РЅРѕРµ Р·РЅР°С‡РµРЅРёРµ РІ СЏС‡РµР№РєРµ [{i + 1}, {j + 1}]", "РћС€РёР±РєР°", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                return;
+                            }
+                            coefficients[i, j] = parsedValue;
+                        }
+                        string constantValue = MatrixGrid[colCount, i].Value?.ToString();
+                        if (string.IsNullOrEmpty(constantValue) || !double.TryParse(constantValue, NumberStyles.Any, CultureInfo.InvariantCulture, out double parsedConstant))
+                        {
+                            MessageBox.Show($"РќРµРєРѕСЂСЂРµРєС‚РЅРѕРµ Р·РЅР°С‡РµРЅРёРµ РєРѕРЅСЃС‚Р°РЅС‚С‹ РІ СЃС‚СЂРѕРєРµ {i + 1}", "РћС€РёР±РєР°", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
+                        constants[i] = parsedConstant;
+                    }
+
+                    StringBuilder inputBuilder = new StringBuilder();
+                    for (int i = 0; i < rowCount; i++)
+                    {
+                        StringBuilder equation = new StringBuilder();
+                        bool firstTerm = true;
+                        for (int j = 0; j < colCount; j++)
+                        {
+                            double coeff = coefficients[i, j];
+                            if (Math.Abs(coeff) < 1e-10)
+                                continue;
+                            if (!firstTerm && coeff > 0)
+                                equation.Append("+");
+                            if (Math.Abs(coeff) == 1.0)
+                                equation.Append(coeff < 0 ? "-" : "");
+                            else if (Math.Abs(coeff) == -1.0)
+                                equation.Append("-");
+                            else
+                                equation.Append(coeff.ToString(CultureInfo.InvariantCulture));
+                            equation.Append($"x{j + 1}");
+                            firstTerm = false;
+                        }
+                        if (firstTerm)
+                            equation.Append("0");
+                        equation.Append($" = {constants[i].ToString(CultureInfo.InvariantCulture)}");
+                        inputBuilder.AppendLine(equation.ToString());
+                    }
+
+                    string input = inputBuilder.ToString();
+                    string errorMessage;
+                    if (!_controller.ValidateInput(input, out errorMessage))
+                    {
+                        MessageBox.Show($"РћС€РёР±РєР°: {errorMessage}", "РћС€РёР±РєР°", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                    result = _controller.SolveSystem(input);
+                }
+
+                OutputListView.Items.Clear();
+
+                if (result.Status == SolutionStatus.NoSolution)
+                {
+                    OutputListView.Items.Add(new ListViewItem(new[] { "РЎС‚Р°С‚СѓСЃ", "РЎРёСЃС‚РµРјР° РЅРµ РёРјРµРµС‚ СЂРµС€РµРЅРёР№" }));
+                }
+                else if (result.Status == SolutionStatus.InfiniteSolutions)
+                {
+                    OutputListView.Items.Add(new ListViewItem(new[] { "РЎС‚Р°С‚СѓСЃ", "РЎРёСЃС‚РµРјР° РёРјРµРµС‚ Р±РµСЃРєРѕРЅРµС‡РЅРѕ РјРЅРѕРіРѕ СЂРµС€РµРЅРёР№" }));
+                }
+                else if (result.Status == SolutionStatus.UniqueSolution)
+                {
+                    foreach (var solution in result.Solutions)
+                    {
+                        OutputListView.Items.Add(new ListViewItem(new[] { solution.Key, solution.Value }));
+                    }
+                    OutputListView.Items.Add(new ListViewItem(new[] { "РџРѕРіСЂРµС€РЅРѕСЃС‚СЊ", $"{result.ResidualNorm.ToString(CultureInfo.InvariantCulture)}" }));
+                }
+                else
+                {
+                    OutputListView.Items.Add(new ListViewItem(new[] { "РЎС‚Р°С‚СѓСЃ", "РЎС‚Р°С‚СѓСЃ СЂРµС€РµРЅРёСЏ РЅРµ РѕРїСЂРµРґРµР»С‘РЅ" }));
+                }
             }
-
-            using var dialog = new SaveFileDialog
+            catch (Exception ex)
             {
-                Filter = "Текстовые файлы (*.csv)|*.csv|Все файлы (*.*)|*.*",
-                Title = "Сохранить результат"
-            };
+                MessageBox.Show($"РћС€РёР±РєР°: {ex.Message}", "РћС€РёР±РєР°", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
-            if (dialog.ShowDialog() == DialogResult.OK)
+        private void ClearButton_Click(object sender, EventArgs e)
+        {
+            if (InputTabControl.SelectedTab == TextInputTab)
             {
+                InputTextBox.Text = string.Empty;
+            }
+            else if (InputTabControl.SelectedTab == MatrixInputTab)
+            {
+                RowCountUpDown.ValueChanged -= RowCountUpDown_ValueChanged;
+                ColumnCountUpDown.ValueChanged -= ColumnCountUpDown_ValueChanged;
+
                 try
                 {
-                    await _fileManager.SaveResultAsync(OutputTextBox.Text, dialog.FileName);
-                    MessageBox.Show("Результат успешно сохранён.", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MatrixGrid.Columns.Clear();
+                    MatrixGrid.Rows.Clear();
+                    for (int j = 0; j < 3; j++)
+                    {
+                        MatrixGrid.Columns.Add($"col{j}", $"x{j + 1}");
+                        MatrixGrid.Columns[j].SortMode = DataGridViewColumnSortMode.NotSortable;
+                        MatrixGrid.Columns[j].ValueType = typeof(string);
+                    }
+                    MatrixGrid.Columns.Add("col_b", "b");
+                    MatrixGrid.Columns[3].SortMode = DataGridViewColumnSortMode.NotSortable;
+                    MatrixGrid.Columns[3].ValueType = typeof(string);
+                    MatrixGrid.RowCount = 3;
+                    RowCountUpDown.Value = 3;
+                    ColumnCountUpDown.Value = 3;
+                    MatrixGrid.Refresh();
                 }
-                catch (Exception ex)
+                finally
                 {
-                    MessageBox.Show($"Ошибка при сохранении файла: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    RowCountUpDown.ValueChanged += RowCountUpDown_ValueChanged;
+                    ColumnCountUpDown.ValueChanged += ColumnCountUpDown_ValueChanged;
+                }
+            }
+            OutputListView.Items.Clear();
+        }
+
+        private void SaveButton_Click(object sender, EventArgs e)
+        {
+            using (SaveFileDialog saveFileDialog = new SaveFileDialog())
+            {
+                saveFileDialog.Filter = "CSV files (*.csv)|*.csv";
+                saveFileDialog.Title = "РЎРѕС…СЂР°РЅРёС‚СЊ СЂРµС€РµРЅРёРµ СЃРёСЃС‚РµРјС‹ СѓСЂР°РІРЅРµРЅРёР№";
+
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    try
+                    {
+                        if (OutputListView.Items.Count == 0)
+                        {
+                            MessageBox.Show("РќРµС‚ СЂРµС€РµРЅРёСЏ РґР»СЏ СЃРѕС…СЂР°РЅРµРЅРёСЏ. РЎРЅР°С‡Р°Р»Р° СЂРµС€РёС‚Рµ СЃРёСЃС‚РµРјСѓ.", "РџСЂРµРґСѓРїСЂРµР¶РґРµРЅРёРµ", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            return;
+                        }
+
+                        StringBuilder csvBuilder = new StringBuilder();
+                        csvBuilder.AppendLine("Variable,Value");
+
+                        foreach (ListViewItem item in OutputListView.Items)
+                        {
+                            string variable = item.SubItems[0].Text;
+                            string value = item.SubItems[1].Text;
+
+                            // Handle special cases for status messages
+                            if (variable == "РЎС‚Р°С‚СѓСЃ")
+                            {
+                                string status;
+                                if (value == "РЎРёСЃС‚РµРјР° РЅРµ РёРјРµРµС‚ СЂРµС€РµРЅРёР№")
+                                    status = "NoSolution";
+                                else if (value == "РЎРёСЃС‚РµРјР° РёРјРµРµС‚ Р±РµСЃРєРѕРЅРµС‡РЅРѕ РјРЅРѕРіРѕ СЂРµС€РµРЅРёР№")
+                                    status = "InfiniteSolutions";
+                                else
+                                    status = "Undefined";
+                                csvBuilder.Clear();
+                                csvBuilder.AppendLine($"Status,{status}");
+                                break;
+                            }
+                            else
+                            {
+                                // Escape commas in values to prevent CSV formatting issues
+                                variable = variable.Replace(",", "\\,");
+                                value = value.Replace(",", "\\,");
+                                csvBuilder.AppendLine($"{variable},{value}");
+                            }
+                        }
+
+                        _fileManager.SaveInputAsync(csvBuilder.ToString(), saveFileDialog.FileName).Wait();
+                        MessageBox.Show("Р РµС€РµРЅРёРµ СѓСЃРїРµС€РЅРѕ СЃРѕС…СЂР°РЅРµРЅРѕ.", "РЈСЃРїРµС…", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"РћС€РёР±РєР° РїСЂРё СЃРѕС…СЂР°РЅРµРЅРёРё С„Р°Р№Р»Р°: {ex.Message}", "РћС€РёР±РєР°", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
             }
         }
@@ -273,13 +340,13 @@ namespace LinAlCalc.UI
                 }
                 else
                 {
-                    MessageBox.Show("Файл документации 'Documentation.chm' не найден. Убедитесь, что файл находится в папке приложения.",
-                        "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Р¤Р°Р№Р» РґРѕРєСѓРјРµРЅС‚Р°С†РёРё 'Documentation.chm' РЅРµ РЅР°Р№РґРµРЅ. РЈР±РµРґРёС‚РµСЃСЊ, С‡С‚Рѕ С„Р°Р№Р» РЅР°С…РѕРґРёС‚СЃСЏ РІ РїР°РїРєРµ РїСЂРёР»РѕР¶РµРЅРёСЏ.",
+                        "РћС€РёР±РєР°", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка при открытии документации: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"РћС€РёР±РєР° РїСЂРё РѕС‚РєСЂС‹С‚РёРё РґРѕРєСѓРјРµРЅС‚Р°С†РёРё: {ex.Message}", "РћС€РёР±РєР°", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -290,90 +357,98 @@ namespace LinAlCalc.UI
                 string helpFilePath = Path.Combine(Application.StartupPath, "Help.chm");
                 if (!File.Exists(helpFilePath))
                 {
-                    MessageBox.Show("Файл справки 'Help.chm' не найден. Убедитесь, что файл находится в папке приложения.",
-                        "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Р¤Р°Р№Р» СЃРїСЂР°РІРєРё 'Help.chm' РЅРµ РЅР°Р№РґРµРЅ. РЈР±РµРґРёС‚РµСЃСЊ, С‡С‚Рѕ С„Р°Р№Р» РЅР°С…РѕРґРёС‚СЃСЏ РІ РїР°РїРєРµ РїСЂРёР»РѕР¶РµРЅРёСЏ.",
+                        "РћС€РёР±РєР°", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
 
                 string section;
                 if (InputTabControl.SelectedTab == TextInputTab)
                 {
-                    section = "vvod_sistemy_cherez_pole_tekstovogo_vvoda.htm"; // Раздел для текстового ввода
+                    section = "vvod_sistemy_cherez_pole_tekstovogo_vvoda.htm";
                 }
                 else
                 {
-                    section = "vvod_sistemy_cherez_tablitsu_koehffitsientov.htm"; // Раздел для матричного ввода
+                    section = "vvod_sistemy_cherez_tablitsu_koehffitsientov.htm";
                 }
 
                 Help.ShowHelp(this, helpFilePath, HelpNavigator.Topic, section);
-
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка при открытии справки: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void MainForm_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.F1)
-            {
-                e.Handled = true; // Отмечаем, что событие обработано
-                HelpButton_Click(sender, e); // Вызываем логику кнопки "Помочь"
+                MessageBox.Show($"РћС€РёР±РєР° РїСЂРё РѕС‚РєСЂС‹С‚РёРё СЃРїСЂР°РІРєРё: {ex.Message}", "РћС€РёР±РєР°", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private void RowCountUpDown_ValueChanged(object sender, EventArgs e)
         {
-            try
+            if (InputTabControl.SelectedTab == MatrixInputTab)
             {
-                int newRows = (int)RowCountUpDown.Value;
-                MatrixGrid.RowCount = newRows;
-                for (int i = 0; i < newRows; i++)
+                int newRowCount = (int)RowCountUpDown.Value;
+                if (newRowCount >= 1)
                 {
-                    for (int j = 0; j < MatrixGrid.ColumnCount; j++)
-                    {
-                        if (MatrixGrid[j, i].Value == null)
-                        {
-                            MatrixGrid[j, i].Value = "0";
-                        }
-                    }
+                    MatrixGrid.RowCount = newRowCount;
+                    MatrixGrid.Refresh();
                 }
             }
-            catch (Exception ex)
+        }
+
+        private void MainForm_KeyDown(object sender, KeyEventArgs e) // РЎРµР№С‡Р°СЃ РЅРµ СЂР°Р±РѕС‚Р°РµС‚
+        {
+            if (e.KeyCode == Keys.F1)
             {
-                MessageBox.Show($"Ошибка изменения количества строк: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                e.Handled = true;
+                HelpButton_Click(sender, e);
             }
         }
 
         private void ColumnCountUpDown_ValueChanged(object sender, EventArgs e)
         {
-            try
+            if (InputTabControl.SelectedTab == MatrixInputTab)
             {
-                int newCols = (int)ColumnCountUpDown.Value + 1;
-                MatrixGrid.ColumnCount = newCols;
-                for (int i = 0; i < (int)ColumnCountUpDown.Value; i++)
+                int newColCount = (int)ColumnCountUpDown.Value;
+                if (newColCount >= 1)
                 {
-                    MatrixGrid.Columns[i].HeaderText = $"x{i + 1}";
-                    MatrixGrid.Columns[i].Width = 60;
-                }
-                MatrixGrid.Columns[(int)ColumnCountUpDown.Value].HeaderText = "=";
-                MatrixGrid.Columns[(int)ColumnCountUpDown.Value].Width = 60;
-
-                for (int i = 0; i < MatrixGrid.RowCount; i++)
-                {
-                    for (int j = 0; j < newCols; j++)
+                    // Preserve existing values
+                    int rowCount = MatrixGrid.RowCount;
+                    var oldValues = new Dictionary<(int, int), string>();
+                    for (int i = 0; i < rowCount; i++)
                     {
-                        if (MatrixGrid[j, i].Value == null)
+                        for (int j = 0; j < MatrixGrid.ColumnCount; j++)
                         {
-                            MatrixGrid[j, i].Value = "0";
+                            if (MatrixGrid[j, i].Value != null)
+                            {
+                                oldValues[(i, j)] = MatrixGrid[j, i].Value.ToString();
+                            }
                         }
                     }
+
+                    // Rebuild columns
+                    MatrixGrid.Columns.Clear();
+                    for (int j = 0; j < newColCount; j++)
+                    {
+                        MatrixGrid.Columns.Add($"col{j}", $"x{j + 1}");
+                        MatrixGrid.Columns[j].SortMode = DataGridViewColumnSortMode.NotSortable;
+                        MatrixGrid.Columns[j].ValueType = typeof(string);
+                    }
+                    MatrixGrid.Columns.Add("col_b", "b");
+                    MatrixGrid.Columns[newColCount].SortMode = DataGridViewColumnSortMode.NotSortable;
+                    MatrixGrid.Columns[newColCount].ValueType = typeof(string);
+
+                    // Restore values
+                    for (int i = 0; i < rowCount; i++)
+                    {
+                        for (int j = 0; j < Math.Min(newColCount + 1, oldValues.Keys.Where(k => k.Item1 == i).Count()); j++)
+                        {
+                            if (oldValues.TryGetValue((i, j), out string value))
+                            {
+                                MatrixGrid[j, i].Value = value;
+                            }
+                        }
+                    }
+
+                    MatrixGrid.Refresh();
                 }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Ошибка изменения количества столбцов: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

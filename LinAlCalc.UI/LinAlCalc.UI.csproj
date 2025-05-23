@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LinAlCalc.Controller\LinAlCalc.Controller.csproj" />
+    <ProjectReference Include="..\LinAlCalc.DataProcessing\LinAlCalc.DataProcessing.csproj" />
   </ItemGroup>
 
 </Project>
