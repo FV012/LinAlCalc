@@ -1,11 +1,7 @@
-using System;
-using System.Windows.Forms;
 using LinAlCalc.Controller;
-using LinAlCalc.FileIO;
 using LinAlCalc.DataProcessing;
-using System.Text;
+using LinAlCalc.FileIO;
 using System.Diagnostics;
-using System.IO;
 
 namespace LinAlCalc.UI
 {
@@ -21,7 +17,7 @@ namespace LinAlCalc.UI
             _fileManager = new FileManager();
             InitializeMatrixGrid();
             this.KeyPreview = true; // Разрешаем форме перехватывать события клавиш
-            this.KeyDown += new KeyEventHandler(MainForm_KeyDown); // Подписываемся на событие KeyDown
+            this.KeyDown += new KeyEventHandler(MainForm_KeyDown!); // Подписываемся на событие KeyDown
         }
 
         private void InitializeMatrixGrid()
@@ -184,28 +180,51 @@ namespace LinAlCalc.UI
 
         private async void LoadButton_Click(object sender, EventArgs e)
         {
-            if (InputTabControl.SelectedTab != TextInputTab)
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
-                MessageBox.Show("Загрузка из файла доступна только в режиме текстового ввода.", "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
+                openFileDialog.Filter = "CSV files (*.csv)|*.csv";
+                openFileDialog.Title = "Открыть файл с системой уравнений";
 
-            using var dialog = new OpenFileDialog
-            {
-                Filter = "Текстовые файлы (*.txt)|*.txt|Все файлы (*.*)|*.*",
-                Title = "Выберите файл с системой уравнений"
-            };
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    try
+                    {
+                        if (InputTabControl.SelectedTab == TextInputTab)
+                        {
+                            // Текстовый ввод
+                            string input = await _fileManager.ReadInputAsync(openFileDialog.FileName);
+                            InputTextBox.Text = input;
+                            OutputTextBox.Text = string.Empty;
+                        }
+                        else if (InputTabControl.SelectedTab == MatrixInputTab)
+                        {
+                            var (coefficients, constants) = await _fileManager.ReadMatrixInputAsync(openFileDialog.FileName);
+                            int rows = coefficients.GetLength(0);
+                            int cols = coefficients.GetLength(1);
 
-            if (dialog.ShowDialog() == DialogResult.OK)
-            {
-                try
-                {
-                    string input = await _fileManager.ReadInputAsync(dialog.FileName);
-                    InputTextBox.Text = input;
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Ошибка при загрузке файла: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            RowCountUpDown.Value = rows;
+                            ColumnCountUpDown.Value = cols;
+
+                            MatrixGrid.RowCount = rows;
+                            MatrixGrid.ColumnCount = cols + 1; // +1 для свободных членов
+
+                            for (int i = 0; i < rows; i++)
+                            {
+                                for (int j = 0; j < cols; j++)
+                                {
+                                    MatrixGrid[j, i].Value = coefficients[i, j];
+                                }
+                                MatrixGrid[cols, i].Value = constants[i];
+                            }
+
+                            // Очищаем выходное поле
+                            OutputTextBox.Text = string.Empty;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Ошибка при загрузке файла: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
             }
         }
@@ -220,7 +239,7 @@ namespace LinAlCalc.UI
 
             using var dialog = new SaveFileDialog
             {
-                Filter = "Текстовые файлы (*.txt)|*.txt|Все файлы (*.*)|*.*",
+                Filter = "Текстовые файлы (*.csv)|*.csv|Все файлы (*.*)|*.*",
                 Title = "Сохранить результат"
             };
 
