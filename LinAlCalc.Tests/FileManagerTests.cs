@@ -22,7 +22,7 @@ namespace LinAlCalc.Tests
             var fileManager = new FileManager();
             string input = "2x1 + x2 = 5";
             string filePath = GetTempFilePath();
-            await fileManager.SaveInputAsync(input, filePath);
+            await FileManager.SaveInputAsync(input, filePath);
             Assert.IsTrue(File.Exists(filePath));
             if (File.Exists(filePath)) File.Delete(filePath);
         }
@@ -34,7 +34,7 @@ namespace LinAlCalc.Tests
             var fileManager = new FileManager();
             string input = "";
             string filePath = GetTempFilePath();
-            await fileManager.SaveInputAsync(input, filePath);
+            await FileManager.SaveInputAsync(input, filePath);
         }
 
         [TestMethod]
@@ -44,7 +44,7 @@ namespace LinAlCalc.Tests
             var fileManager = new FileManager();
             string input = "2x1 + x2 = 5";
             string filePath = "";
-            await fileManager.SaveInputAsync(input, filePath);
+            await FileManager.SaveInputAsync(input, filePath);
         }
 
         [TestMethod]
@@ -54,7 +54,7 @@ namespace LinAlCalc.Tests
             string input = "2x1 + x2 = 5";
             string filePath = GetTempFilePath();
             await File.WriteAllTextAsync(filePath, input);
-            string content = await fileManager.ReadInputAsync(filePath);
+            string content = await FileManager.ReadInputAsync(filePath);
             Assert.AreEqual(input, content);
             if (File.Exists(filePath)) File.Delete(filePath);
         }
@@ -65,7 +65,7 @@ namespace LinAlCalc.Tests
         {
             var fileManager = new FileManager();
             string filePath = GetTempFilePath();
-            await fileManager.ReadInputAsync(filePath);
+            await FileManager.ReadInputAsync(filePath);
         }
 
         [TestMethod]
@@ -74,7 +74,7 @@ namespace LinAlCalc.Tests
         {
             var fileManager = new FileManager();
             string filePath = "";
-            await fileManager.ReadInputAsync(filePath);
+            await FileManager.ReadInputAsync(filePath);
         }
 
         [TestMethod]
@@ -83,7 +83,7 @@ namespace LinAlCalc.Tests
             var fileManager = new FileManager();
             string result = "x1 = 2\nx2 = 1";
             string filePath = GetTempFilePath();
-            await fileManager.SaveResultAsync(result, filePath);
+            await FileManager.SaveResultAsync(result, filePath);
             Assert.IsTrue(File.Exists(filePath));
             if (File.Exists(filePath)) File.Delete(filePath);
         }
@@ -95,7 +95,7 @@ namespace LinAlCalc.Tests
             var fileManager = new FileManager();
             string result = "";
             string filePath = GetTempFilePath();
-            await fileManager.SaveResultAsync(result, filePath);
+            await FileManager.SaveResultAsync(result, filePath);
         }
 
         [TestMethod]
@@ -105,7 +105,7 @@ namespace LinAlCalc.Tests
             var fileManager = new FileManager();
             string result = "x1 = 2\nx2 = 1";
             string filePath = "";
-            await fileManager.SaveResultAsync(result, filePath);
+            await FileManager.SaveResultAsync(result, filePath);
         }
 
         [TestMethod]
@@ -114,7 +114,7 @@ namespace LinAlCalc.Tests
             var fileManager = new FileManager();
             string filePath = GetTempFilePath();
             File.WriteAllText(filePath, "test");
-            bool exists = fileManager.FileExists(filePath);
+            bool exists = FileManager.FileExists(filePath);
             Assert.IsTrue(exists);
             if (File.Exists(filePath)) File.Delete(filePath);
         }
@@ -124,7 +124,7 @@ namespace LinAlCalc.Tests
         {
             var fileManager = new FileManager();
             string filePath = GetTempFilePath();
-            bool exists = fileManager.FileExists(filePath);
+            bool exists = FileManager.FileExists(filePath);
             Assert.IsFalse(exists);
         }
 
@@ -133,7 +133,7 @@ namespace LinAlCalc.Tests
         {
             var fileManager = new FileManager();
             string filePath = "";
-            bool exists = fileManager.FileExists(filePath);
+            bool exists = FileManager.FileExists(filePath);
             Assert.IsFalse(exists);
         }
 
@@ -142,7 +142,7 @@ namespace LinAlCalc.Tests
         {
             var fileManager = new FileManager();
             string directoryPath = Path.GetTempPath();
-            bool isWritable = fileManager.IsDirectoryWritable(directoryPath);
+            bool isWritable = FileManager.IsDirectoryWritable(directoryPath);
             Assert.IsTrue(isWritable);
         }
 
@@ -151,7 +151,7 @@ namespace LinAlCalc.Tests
         {
             var fileManager = new FileManager();
             string directoryPath = "";
-            bool isWritable = fileManager.IsDirectoryWritable(directoryPath);
+            bool isWritable = FileManager.IsDirectoryWritable(directoryPath);
             Assert.IsFalse(isWritable);
         }
     }

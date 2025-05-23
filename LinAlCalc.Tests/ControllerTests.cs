@@ -17,7 +17,7 @@ namespace LinAlCalc.Tests
         {
             var controller = new LinearSystemController();
             string input = "x1 + x2 = 5\nx1 = 1";
-            var result = controller.SolveSystem(input);
+            var result = LinearSystemController.SolveSystem(input);
             Assert.AreEqual(SolutionStatus.Unknown, result.Status);
         }
 
@@ -26,7 +26,7 @@ namespace LinAlCalc.Tests
         {
             var controller = new LinearSystemController();
             string input = "x1 + x2 = 5\nx1 = 1";
-            var result = controller.SolveSystem(input);
+            var result = LinearSystemController.SolveSystem(input);
             Assert.AreEqual(0, result.Solutions.Count);
         }
 
@@ -35,7 +35,7 @@ namespace LinAlCalc.Tests
         {
             var controller = new LinearSystemController();
             string input = "x1 + x2 = 5\nx1 = 1";
-            var result = controller.SolveSystem(input);
+            var result = LinearSystemController.SolveSystem(input);
             Assert.IsTrue(double.IsNaN(result.ResidualNorm));
         }
 
@@ -45,7 +45,7 @@ namespace LinAlCalc.Tests
             var controller = new LinearSystemController();
             string input = "2x1 + x2 = 5\nx1 - x2 = 1";
             string errorMessage;
-            bool isValid = controller.ValidateInput(input, out errorMessage);
+            bool isValid = LinearSystemController.ValidateInput(input, out errorMessage);
             Assert.IsTrue(isValid);
         }
 
@@ -55,7 +55,7 @@ namespace LinAlCalc.Tests
             var controller = new LinearSystemController();
             string input = "2x1 + x2 = 5\nx1 - x2 = 1";
             string errorMessage;
-            controller.ValidateInput(input, out errorMessage);
+            LinearSystemController.ValidateInput(input, out errorMessage);
             Assert.IsTrue(string.IsNullOrEmpty(errorMessage));
         }
 
@@ -65,7 +65,7 @@ namespace LinAlCalc.Tests
             var controller = new LinearSystemController();
             string input = "x1 + x2 = 5\nx1 = 1";
             string errorMessage;
-            bool isValid = controller.ValidateInput(input, out errorMessage);
+            bool isValid = LinearSystemController.ValidateInput(input, out errorMessage);
             Assert.IsFalse(isValid);
         }
 
@@ -75,7 +75,7 @@ namespace LinAlCalc.Tests
             var controller = new LinearSystemController();
             string input = "x1 + x2 = 5\nx1 = 1";
             string errorMessage;
-            controller.ValidateInput(input, out errorMessage);
+            LinearSystemController.ValidateInput(input, out errorMessage);
             Assert.IsFalse(string.IsNullOrEmpty(errorMessage));
         }
     }

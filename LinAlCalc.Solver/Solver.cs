@@ -2,39 +2,6 @@
 
 namespace LinAlCalc.Solver
 {
-    public enum SolutionStatus
-    {
-        UniqueSolution,
-        InfiniteSolutions,
-        NoSolution,
-        Unknown
-    }
-
-    public class SolutionResult
-    {
-        public Dictionary<string, string> Solutions { get; set; } = [];
-        public SolutionStatus Status { get; set; } = SolutionStatus.Unknown;
-        public double ResidualNorm { get; set; } = double.NaN;
-
-        public override string ToString()
-        {
-            if (Status == SolutionStatus.NoSolution)
-                return "Система не имеет решений.";
-            if (Status == SolutionStatus.InfiniteSolutions)
-                return "Система имеет бесконечно много решений.";
-            if (Status == SolutionStatus.UniqueSolution)
-            {
-                string result = "Решение:\n";
-                foreach (var pair in Solutions)
-                    result += $"{pair.Key} = {pair.Value}\n";
-                result += $"Погрешность (норма невязки): {ResidualNorm}";
-                return result;
-            }
-
-            return "Статус решения не определён.";
-        }
-    }
-
     public static class LinearSystemSolver
     {
         public static SolutionResult Solve(Matrix<double> A, Vector<double> b)
@@ -90,7 +57,6 @@ namespace LinAlCalc.Solver
                 }
             }
 
-            // Построим словарь решений (символьных)
             result.Solutions = [];
             for (int i = 0; i < x.Count; i++)
             {
@@ -104,15 +70,12 @@ namespace LinAlCalc.Solver
             return result;
         }
 
-        // Преобразует double в строку дробью, если это возможно
         public static string ToSymbolicFraction(double value, double tolerance = 1e-5)
         {
-            // Проверяем, является ли число целым с учётом допустимой погрешности
             double roundedValue = Math.Round(value);
             if (Math.Abs(value - roundedValue) < tolerance)
                 return ((int)roundedValue).ToString();
 
-            // Найдём приближение в виде дроби
             int maxDen = 1000;
             int bestNum = 0;
             int bestDen = 1;

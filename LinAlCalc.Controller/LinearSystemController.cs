@@ -6,30 +6,24 @@ namespace LinAlCalc.Controller
 {
     public class LinearSystemController
     {
-        // Метод для обработки входных данных и решения системы
-        public SolutionResult SolveSystem(string input)
+        public static SolutionResult SolveSystem(string input)
         {
             try
             {
-                // Парсим входные данные
                 var system = DataProcessor.ParseInput(input);
-
-                // Валидируем входные данные
                 DataProcessor.ValidateInput(system);
 
-                // Преобразуем в формат MathNet.Numerics
                 var A = Matrix<double>.Build.DenseOfArray(system.Coefficients);
                 var b = Vector<double>.Build.DenseOfArray(system.Constants);
 
-                // Решаем систему
                 return LinearSystemSolver.Solve(A, b);
             }
-            catch (ArgumentException ex)
+            catch (ArgumentException)
             {
                 return new SolutionResult
                 {
                     Status = SolutionStatus.Unknown,
-                    Solutions = new System.Collections.Generic.Dictionary<string, string>(),
+                    Solutions = [],
                     ResidualNorm = double.NaN
                 };
             }
@@ -38,14 +32,13 @@ namespace LinAlCalc.Controller
                 return new SolutionResult
                 {
                     Status = SolutionStatus.Unknown,
-                    Solutions = new System.Collections.Generic.Dictionary<string, string>(),
+                    Solutions = [],
                     ResidualNorm = double.NaN
                 };
             }
         }
 
-        // Метод для проверки корректности входных данных
-        public bool ValidateInput(string input, out string errorMessage)
+        public static bool ValidateInput(string input, out string errorMessage)
         {
             errorMessage = string.Empty;
             try
@@ -59,7 +52,7 @@ namespace LinAlCalc.Controller
                 errorMessage = ex.Message;
                 return false;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 errorMessage = "Произошла неизвестная ошибка при обработке входных данных.";
                 return false;
